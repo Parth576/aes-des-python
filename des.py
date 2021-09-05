@@ -3,9 +3,11 @@ from typing import List
 
 class DES:
 
-    def __init__(self, plainText:str) -> None:
+    def __init__(self, plainText:str, key:str) -> None:
         self.plainText = plainText
-        self.cipherText = ""
+        self.cipherText = b''
+        self.cipherTextArr=[]
+        self.key = key
         self.plainTextByteArr = []
         self.keyByteArr = []
         self.permKeyArr = []
@@ -182,10 +184,13 @@ class DES:
                 newRoundKey.append(self.roundKeys[round+1][k])
             self.roundKeys[round+1] = newRoundKey
 
-    def _applyInitialPermutation(self) -> List:
+    def _applyInitialPermutation(self, decrypt:bool) -> List:
         newPlaintextArr = []
         for k in self.initalPlaintextPerm:
-            newPlaintextArr.append(self.plainTextByteArr[k])
+            if decrypt:
+                newPlaintextArr.append(self.cipherTextArr[k])
+            else:
+                newPlaintextArr.append(self.plainTextByteArr[k])
         return newPlaintextArr
 
     def _bitwiseXOR(self, expandedRightBlock:List, roundKey:List) -> List:
@@ -220,20 +225,20 @@ class DES:
             result.append(sboxResult[k])
         return result
             
-    def encrypt(self, key) -> None:
+    def encrypt(self) -> None:
         pt = self.plainText.encode()
         if len(pt) > 8:
             print("Plaintext should be less than 8 bytes")
             return
-        bytesKey = key.encode()
-        if len(key) != 8:
+        bytesKey = self.key.encode()
+        if len(self.key) != 8:
             print("Key should be exactly 8 bytes")
             return
         paddedByteText = self._pad(pt)
         self.plainTextByteArr = self._getBinArray(paddedByteText)
         self.keyByteArr = self._getBinArray(bytesKey)
         self._generateSubkeys()
-        permutedPlaintextArr = self._applyInitialPermutation()
+        permutedPlaintextArr = self._applyInitialPermutation(decrypt=False)
 
         # left and right arrays to split the plaintext into 32 bits
         l = []
@@ -242,7 +247,7 @@ class DES:
         r.append(permutedPlaintextArr[32:])
 
         # 16 rounds start
-        for round in range(1,16):
+        for round in range(1,17):
             l.append(r[round-1])
             f = self._applyRoundFunction(r[round-1], self.roundKeys[round])
             xorResult = self._bitwiseXOR(l[round-1],f)
@@ -253,11 +258,32 @@ class DES:
         for k in self.finalPerm:
             finalResult.append(switchArr[k])
         byteResult = self._bit2bytes(finalResult)
-        print(byteResult.decode('unicode_escape'))
-        print(self._unpad(byteResult))
-        stringResult = self._unpad(byteResult).decode('unicode_escape')
-        print(stringResult)
-
+        self.cipherText = byteResult
+        print(f'Encrypted Text: {byteResult.decode("unicode_escape")}')
 
     def decrypt(self) -> None:
-        pass
+        # Decryption is same except that keys are reversed
+        self.cipherTextArr = self._getBinArray(self.cipherText)
+        permutedCipherTextArr = self._applyInitialPermutation(decrypt=True)
+
+        l = []
+        r = []
+        l.append(permutedCipherTextArr[:32])
+        r.append(permutedCipherTextArr[32:])
+
+        for round in range(1,17):
+            l.append(r[round-1])
+            f = self._applyRoundFunction(r[round-1], self.roundKeys[17-round])
+            xorResult = self._bitwiseXOR(l[round-1],f)
+            r.append(xorResult)
+
+        switchArr = r[-1] + l[-1]
+        finalResult = []
+        for k in self.finalPerm:
+            finalResult.append(switchArr[k])
+        byteResult = self._bit2bytes(finalResult)
+        
+        print(f'Decrypted Text: {byteResult.decode("unicode_escape")}')
+
+
+
