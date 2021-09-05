@@ -1,4 +1,3 @@
-from aes import AES
 from des import DES
 
 x = DES(plainText="secretss",key="s3cr3tPy")

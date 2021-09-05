@@ -1,6 +1,5 @@
 from typing import List
 
-
 class DES:
 
     def __init__(self, plainText:str, key:str) -> None:
