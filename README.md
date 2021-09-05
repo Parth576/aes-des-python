@@ -17,8 +17,11 @@
 
 ## References
 
+* Padding/Unpadding - https://stackoverflow.com/a/14205319
 * https://www.jigsawacademy.com/blogs/cyber-security/des-algorithm/
 * https://github.com/kongfy/DES/blob/master/Riv85.txt
+* http://page.math.tu-berlin.de/~kant/teaching/hess/krypto-ws2006/des.htm
+* https://gist.github.com/BlackRabbit-github/2924939
 
 # AES
 

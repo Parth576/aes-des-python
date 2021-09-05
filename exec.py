@@ -1,4 +1,5 @@
 from aes import AES
+from des import DES
 
-x = AES("nice")
-print(x.encrypt())
+x = DES(plainText="nice")
+x.encrypt(key="s3cr3tPy")
