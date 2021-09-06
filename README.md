@@ -8,14 +8,19 @@
 * Based on Feistel network -> dividing input into 2 blocks, processing seperately
 * Bit-oriented cipher
 
-## Steps
+## Steps for encryption
 
 * IP - Initial Permutation
 * Right & Left Plain Text 
 * 16 rounds
+* Generating round keys -> initial permutation, split, left rotate
 * Each round -> key transformation, permutation, S-box, P-box permutation, swap/XOR
 * Final permutation
 * 5 modes -> ECB, CBC, CFB, OFB, CTR
+
+## Steps for decryption
+
+* Same as encryption except round keys need to be applied in reverse order
 
 ## References
 
