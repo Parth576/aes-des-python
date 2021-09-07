@@ -201,6 +201,7 @@ class DES:
     def _applySbox(self, xorResult:List) -> List:
         sboxResult = []
         iter = 0
+        # 1 0 0 1 0 1
         for i in range(0,48,6):
             roundSbox = self.sbox[iter]
             subArray = xorResult[i:i+6]
@@ -235,6 +236,7 @@ class DES:
             return
         paddedByteText = self._pad(pt)
         self.plainTextByteArr = self._getBinArray(paddedByteText)
+        # a = [1,0,1,0]
         self.keyByteArr = self._getBinArray(bytesKey)
         self._generateSubkeys()
         permutedPlaintextArr = self._applyInitialPermutation(decrypt=False)

@@ -59,3 +59,8 @@
 ## References
 
 * https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture8.pdf
+* https://www.youtube.com/watch?v=lnKPoWZnNNM
+* https://gist.github.com/bonsaiviking/5571001
+* https://github.com/boppreh/aes/blob/master/aes.py
+* http://anh.cs.luc.edu/331/code/aes.py
+* https://github.com/bozhu/AES-Python/blob/master/aes.py
